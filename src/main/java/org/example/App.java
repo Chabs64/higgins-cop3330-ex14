@@ -12,7 +12,8 @@ Sometimes a program requires an extra step in one case, but in all other cases t
 Write a simple program to compute the tax on an order amount.
 The program should prompt for the order amount and the state.
 If the state is “WI,” then the order must be charged 5.5% tax.
-The program should display the subtotal, tax, and total for Wisconsin residents but display just the total for non-residents.
+The program should display the subtotal, tax, and total for Wisconsin residents
+but display just the total for non-residents.
 
 Example Output
 What is the order amount? 10
@@ -33,10 +34,40 @@ Ensure that all money is rounded up to the nearest cent.
 Use a single output statement at the end of the program to display the program results.
  */
 
-public class App 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Scanner;
+
+public class App
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
+        Scanner in = new Scanner(System.in);
+
+        System.out.println("What is the order amount? ");
+        BigDecimal amount = new BigDecimal(in.nextLine());
+        System.out.println("What is the state? ");
+        String state = in.nextLine();
+
+        double taxRate = 0.00;
+        BigDecimal taxAmount = new BigDecimal("0");
+        BigDecimal total = new BigDecimal("0");
+
+        if(state.equals("WI"))
+        {
+            taxRate = 0.055;
+            taxAmount = amount.multiply(new BigDecimal(taxRate));
+            total = amount.add(taxAmount);
+            System.out.println("The subtotal is $"+amount.setScale(2, RoundingMode.HALF_UP)+".\n" +
+                    "The tax is $"+taxAmount.setScale(2,RoundingMode.HALF_UP)+".\n" +
+                    "The total is $"+total.setScale(2,RoundingMode.HALF_UP)+".");
+        }
+
+        if(!state.equals("WI"))
+        {
+            taxAmount = amount.multiply(new BigDecimal(taxRate));
+            total = amount.add(taxAmount);
+            System.out.println("The total is $"+total.setScale(2,RoundingMode.HALF_UP)+".");
+        }
     }
 }
